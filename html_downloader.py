@@ -1,9 +1,11 @@
-import urllib.request
+import urllib.request, string
 
 class HtmlDownloader(object):
     def download(self, url):
         if url is None:
             return None
+
+        url = urllib.parse.quote(url, safe = string.printable) # 中文url转码
         response = urllib.request.urlopen(url)
         if response.getcode() != 200:
             return None
