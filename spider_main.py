@@ -1,4 +1,5 @@
 import html_downloader, html_outputer, html_parser, url_manager
+import urllib.parse
 
 class SpiderMain(object):
     def __init__(self):
@@ -13,13 +14,13 @@ class SpiderMain(object):
         while self.urls.has_new_url(): # 当前有可供抓取的URL
             try:
                 new_url = self.urls.get_new_url() # 获得新的URL
-                print('正在爬取第'+ str(cnt) + '个URL：' + new_url) # 打印次数和URL
+                print('正在爬取第 %d 个URL：%s' % (cnt, urllib.parse.unquote(new_url))) # 打印次数和URL
                 html_cont = self.downloader.download(new_url) # 下载网页内容
-                new_urls, new_data = self.parser.parse(new_url, html_cont) # 解析网页并获得新的URL和数据
+                new_urls, new_data = self.parser.parse(html_cont) # 解析网页并获得新的URL和数据
                 self.urls.add_new_urls(new_urls) # 新的URL加入管理器
                 self.outputer.collect_data(new_data) # 输出器收集数据
 
-                if cnt == 1000: #预定爬取1000个网页
+                if cnt == 100: #预定爬取1000个网页
                     break
 
                 cnt += 1 # 计数

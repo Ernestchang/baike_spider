@@ -1,12 +1,13 @@
-import urllib.request, string
+import requests
 
 class HtmlDownloader(object):
     def download(self, url):
         if url is None:
             return None
 
-        url = urllib.parse.quote(url, safe = string.printable) # 中文url转码
-        response = urllib.request.urlopen(url)
-        if response.getcode() != 200:
+        head = {'User-Agent':'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.115 Safari/537.36'}
+        response = requests.get(url)
+        if response.status_code != 200:
             return None
-        return response.read()
+        response.encoding = 'utf-8'
+        return response

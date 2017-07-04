@@ -19,8 +19,8 @@ class HtmlOutputer(object):
             file.write('<tr>')
             file.write('<td>%d</td>' % i)
             i += 1
-            file.write('<td>%s</td>' % data['url'])
             file.write('<td>%s</td>' % data['title'])
+            file.write('<td>%s</td>' % data['url'])
             file.write('<td>%s</td>' % data['summary'])
             file.write('</tr>')
 

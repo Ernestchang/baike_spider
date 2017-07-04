@@ -6,13 +6,12 @@ class HtmlParser(object):
     def _get_new_urls(self, page_url, soup):
         new_urls = set()
         # /item/Python
-        links = soup.findAll('a', href = re.compile(r'/item/*?')) # 获取网页内所有新URL
+        links = soup.find_all('a', href = re.compile(r'/item/')) # 获取网页内所有新URL
         for link in links: # 逐条处理
             new_url = link['href']
             new_full_url = urllib.parse.urljoin(page_url,new_url) # 补充完整
             new_urls.add(new_full_url) # 加入URL集合
         return new_urls
-
 
     def _get_new_data(self, page_url, soup):
         res_data = {}
@@ -31,11 +30,14 @@ class HtmlParser(object):
         return res_data
 
 
-    def parse(self, page_url, html_cont):
-        if page_url is None or html_cont is None:
+    def parse(self, html_cont):
+        if html_cont is None:
             return
 
-        soup = BeautifulSoup(html_cont, 'html.parser', from_encoding = 'utf-8')
+        page_url = html_cont.url
+        soup = BeautifulSoup(html_cont.text, 'lxml')
+
         new_urls = self._get_new_urls(page_url, soup)
         new_data = self._get_new_data(page_url, soup)
+
         return new_urls, new_data
